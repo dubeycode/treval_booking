@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Book Ticket{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-ticket-alt"></i> Confirm Your Booking</h3>
+            </div>
+            <div class="card-body">
+                <!-- Travel Details (Read-Only) -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5>Journey Details</h5>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6><strong>{{ travel_option.travel_id }}</strong> 
+                                            <span class="badge bg-primary text-capitalize">{{ travel_option.travel_type }}</span>
+                                        </h6>
+                                        <p class="mb-1">
+                                            <strong>{{ travel_option.source }}</strong> 
+                                            <i class="fas fa-arrow-right mx-2"></i> 
+                                            <strong>{{ travel_option.destination }}</strong>
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar"></i> {{ travel_option.departure_date|date:"M d, Y" }} 
+                                            at {{ travel_option.departure_time }}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <div class="price-tag">₹{{ travel_option.price }} per seat</div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-users"></i> {{ travel_option.available_seats }} seats available
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passenger Information (Read-Only) -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5>Passenger Information</h5>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Name:</strong> {{ user.get_full_name|default:user.username }}</p>
+                                        <p class="mb-1"><strong>Email:</strong> {{ user.email }}</p>
+                                        <p class="mb-0"><strong>Username:</strong> {{ user.username }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Only Seat Selection Form -->
+                <form method="post" id="booking-form">
+                    {% csrf_token %}
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Select Number of Seats</h5>
+                            {{ form|crispy }}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-calculator"></i> Booking Summary</h6>
+                                    <div id="booking-summary">
+                                        <p class="mb-2">Seats: <span id="seats-count">1</span></p>
+                                        <p class="mb-2">Price per seat: ₹<span id="price-per-seat">{{ travel_option.price }}</span></p>
+                                        <hr>
+                                        <h5 class="mb-0">Total: ₹<span id="total-price">{{ travel_option.price }}</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>Note:</strong> All booking details will be generated automatically for security. 
+                        You only need to select the number of seats.
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'booking:travel_list' %}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> Back to Search
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-check"></i> Confirm Booking
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-shield-alt"></i> Secure Booking</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> Instant confirmation</li>
+                    <li><i class="fas fa-check text-success"></i> Auto-generated booking ID</li>
+                    <li><i class="fas fa-check text-success"></i> Secure payment processing</li>
+                    <li><i class="fas fa-check text-success"></i> E-ticket via email</li>
+                    <li><i class="fas fa-check text-success"></i> 24/7 customer support</li>
+                    <li><i class="fas fa-check text-success"></i> Easy cancellation</li>
+                </ul>
+                
+                <div class="alert alert-warning alert-sm">
+                    <small>
+                        <i class="fas fa-lock"></i> 
+                        <strong>Security:</strong> Booking details are auto-generated to prevent tampering.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const seatsInput = document.querySelector('#id_number_of_seats');
+    const pricePerSeat = '{{ travel_option.price }}';
+    
+    function updateSummary() {
+        const seats = parseInt(seatsInput.value) || 1;
+        const total = seats * pricePerSeat;
+        
+        document.getElementById('seats-count').textContent = seats;
+        document.getElementById('total-price').textContent = total.toLocaleString();
+    }
+    
+    seatsInput.addEventListener('input', updateSummary);
+    updateSummary(); // Initial calculation
+});
+</script>
+{% endblock %}

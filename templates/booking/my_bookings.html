@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-list"></i> My Bookings</h2>
+    <a href="{% url 'booking:travel_list' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> New Booking
+    </a>
+</div>
+
+{% if bookings %}
+<div class="row">
+    {% for booking in bookings %}
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <h6 class="mb-1">{{ booking.booking_id }}</h6>
+                        <span class="badge bg-{% if booking.status == 'confirmed' %}success{% else %}danger{% endif %}">
+                            {{ booking.status|title }}
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{ booking.travel_option.travel_id }}</strong>
+                        <br>
+                        <small class="text-muted text-capitalize">
+                            <i class="fas fa-{% if booking.travel_option.travel_type == 'flight' %}plane{% elif booking.travel_option.travel_type == 'train' %}train{% else %}bus{% endif %}"></i>
+                            {{ booking.travel_option.travel_type }}
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{ booking.travel_option.source }}</strong> → <strong>{{ booking.travel_option.destination }}</strong>
+                        <br>
+                        <small class="text-muted">{{ booking.travel_option.departure_date|date:"M d, Y" }} at {{ booking.travel_option.departure_time }}</small>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <strong>{{ booking.number_of_seats }} seat{{ booking.number_of_seats|pluralize }}</strong>
+                        <br>
+                        <strong class="text-primary">₹{{ booking.total_price }}</strong>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <div class="btn-group">
+                            <a href="{% url 'booking:booking_detail' booking.booking_id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            {% if booking.status == 'confirmed' %}
+                            <a href="{% url 'booking:cancel_booking' booking.booking_id %}" class="btn btn-sm btn-outline-danger cancel-booking-btn">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav aria-label="Bookings pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+        </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="text-center">
+    <div class="card">
+        <div class="card-body py-5">
+            <i class="fas fa-suitcase fa-3x text-muted mb-3"></i>
+            <h4>No bookings yet</h4>
+            <p class="text-muted">You haven't made any bookings. Start planning your journey!</p>
+            <a href="{% url 'booking:travel_list' %}" class="btn btn-primary">
+                <i class="fas fa-search"></i> Find Travel Options
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block title %}Book Travel{% endblock %}
+
+{% block content %}
+<h2><i class="fas fa-search"></i> Find Your Journey</h2>
+
+<!-- Search Form -->
+<div class="search-form my-3">
+    <form method="get" class="row g-3">
+        <div class="col-md-2">
+            {{ form.field|add_class:"form-control" }}
+        </div>
+        <div class="col-md-3">
+            {{ form.source|add_class:"form-control" }}
+        </div>
+        <div class="col-md-3">
+            {{ form.destination|add_class:"form-control" }}
+        </div>
+        <div class="col-md-2">
+            {{ form.departure_date|add_class:"form-control" }}
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Results -->
+<div class="row">
+    {% for travel in travel_options %}
+    <div class="col-12 mb-3">
+        <div class="card travel-card {{ travel.travel_type }}">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-1 text-center">
+                        {% if travel.travel_type == 'flight' %}
+                            <i class="fas fa-plane fa-2x text-primary"></i>
+                        {% elif travel.travel_type == 'train' %}
+                            <i class="fas fa-train fa-2x text-success"></i>
+                        {% else %}
+                            <i class="fas fa-bus fa-2x text-warning"></i>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        <h5>{{ travel.travel_id }}</h5>
+                        <small class="text-muted text-capitalize">{{ travel.travel_type }}</small>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>{{ travel.source }}</strong>
+                        <br><small>{{ travel.departure_time }}</small>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>{{ travel.destination }}</strong>
+                        <br><small>{{ travel.arrival_time }}</small>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="price-tag">₹{{ travel.price }}</div>
+                        <small class="text-muted">{{ travel.available_seats }} seats left</small>
+                    </div>
+                    <div class="col-md-1">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'booking:booking_create' travel.id %}" class="btn btn-success">
+                            <i class="fas fa-ticket-alt"></i> Book
+                        </a>
+                        {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary">
+                            Login to Book
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No travel options found. Try different search criteria.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav aria-label="Travel options pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+        </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

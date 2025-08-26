@@ -1,0 +1,74 @@
+/* Custom styles for Travel Booking App */
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.jumbotron {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.card {
+    transition: transform 0.2s;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+}
+
+.travel-card {
+    border-left: 4px solid #007bff;
+}
+
+.travel-card.flight {
+    border-left-color: #007bff;
+}
+
+.travel-card.train {
+    border-left-color: #28a745;
+}
+
+.travel-card.bus {
+    border-left-color: #ffc107;
+}
+
+.booking-status.confirmed {
+    color: #28a745;
+}
+
+.booking-status.cancelled {
+    color: #dc3545;
+}
+
+.search-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.price-tag {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.footer {
+    margin-top: auto;
+}

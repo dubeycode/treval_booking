@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+    <div class="container">
+        <h1 class="display-4">Welcome to TravelBook</h1>
+        <p class="lead">Your one-stop solution for booking flights, trains, and buses.</p>
+        <a class="btn btn-light btn-lg" href="{% url 'booking:travel_list' %}" role="button">
+            <i class="fas fa-search"></i> Find Your Journey
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-plane fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Flights</h5>
+                <p class="card-text">Book domestic and international flights with ease.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-train fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Trains</h5>
+                <p class="card-text">Comfortable train journeys across the country.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-bus fa-3x text-warning mb-3"></i>
+                <h5 class="card-title">Buses</h5>
+                <p class="card-text">Affordable bus travel to your destination.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
