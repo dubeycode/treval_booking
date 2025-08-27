@@ -65,9 +65,9 @@ WSGI_APPLICATION = 'travel_booking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'darkroom$travel',   # Database name 
+        'NAME': 'darkroom$travel_db',   # Database name 
         'USER': 'darkroom',          # PythonAnywhere username
-        'PASSWORD': 'password@99',  # Apna MySQL password 
+        'PASSWORD': 'password@123',  # Apna MySQL password 
         'HOST': 'darkroom.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
