@@ -65,20 +65,14 @@ WSGI_APPLICATION = 'travel_booking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'travel_booking',   # database name
-        'USER': 'root',             # default XAMPP user
-        'PASSWORD': '',             # default XAMPP root user ke liye khali hota hai
-        'HOST': '127.0.0.1',        # 'localhost' bhi chalega
-        'PORT': '3306',             # default MySQL port
+        'NAME': 'darkroom$travel',   # Database name 
+        'USER': 'darkroom',          # PythonAnywhere username
+        'PASSWORD': 'password@99',  # Apna MySQL password 
+        'HOST': 'darkroom.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
-# For development with SQLite (comment out MySQL config above)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
