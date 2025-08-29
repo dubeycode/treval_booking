@@ -25,7 +25,8 @@
 </div>
 
 <!-- Travel Type Filter -->
-<a class="btn btn-outline-primary me-2" href="{% url 'booking:travel_list_by_type' 'flight' %}">
+<div class="my-3">
+    <a class="btn btn-outline-primary me-2" href="{% url 'booking:travel_list_by_type' 'flight' %}">
     <i class="fas fa-plane"></i> Flights
 </a>
 <a class="btn btn-outline-success me-2" href="{% url 'booking:travel_list_by_type' 'train' %}">
@@ -37,6 +38,7 @@
 <a class="btn btn-outline-dark" href="{% url 'booking:travel_list_view' %}">
     <i class="fas fa-list"></i> All
 </a>
+</div>
 
 
 

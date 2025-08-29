@@ -7,35 +7,37 @@ from django.db.models import Q
 from .models import TravelOption, Booking
 from .forms import TravelSearchForm, BookingForm
 
+
 def travel_list_view(request, travel_type=None):
-    # Get all travel options
-    travel_options = TravelOption.objects.all()
+    form = TravelSearchForm(request.GET)
+    travel_options = TravelOption.objects.filter(available_seats__gt=0)
 
-    # Apply travel type filter if provided
-    if travel_type:
-        travel_options = travel_options.filter(travel_type=travel_type)
+    if form.is_valid():
+        form_travel_type = form.cleaned_data.get('travel_type') or travel_type
+        source = form.cleaned_data.get('source')
+        destination = form.cleaned_data.get('destination')
+        departure_date = form.cleaned_data.get('departure_date')
 
-    # Other filters
-    source = request.GET.get('source', '')
-    destination = request.GET.get('destination', '')
-    departure_date = request.GET.get('departure_date', '')
+        if form_travel_type:
+            travel_options = travel_options.filter(travel_type=form_travel_type)
+        if source:
+            travel_options = travel_options.filter(source__icontains=source)
+        if destination:
+            travel_options = travel_options.filter(destination__icontains=destination)
+        if departure_date:
+            travel_options = travel_options.filter(departure_date=departure_date)
 
-    if source:
-        travel_options = travel_options.filter(source__icontains=source)
-    if destination:
-        travel_options = travel_options.filter(destination__icontains=destination)
-    if departure_date:
-        travel_options = travel_options.filter(departure_date=departure_date)
-
-    # Pagination
     paginator = Paginator(travel_options, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'booking/travel_list.html', {
-        'travel_options': page_obj,
+    context = {
+        'form': form,
         'page_obj': page_obj,
-    })
+        'travel_options': page_obj.object_list
+    }
+    return render(request, 'booking/travel_list.html', context)
+
 
 @login_required
 def booking_create(request, travel_id):

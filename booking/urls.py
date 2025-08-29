@@ -6,12 +6,13 @@ app_name = 'booking'
 
 
 
-
 urlpatterns = [
-    path('<str:travel_type>/', views.travel_list_view, name='travel_list_by_type'),
-    path('', views.travel_list_view, name='travel_list_view'),
+    # Travel list (with optional type filter)
+    path('travel/', views.travel_list_view, name='travel_list_view'),
+    path('travel/', views.travel_list_view, name='travel_list'),  
+    path('travel/<str:travel_type>/', views.travel_list_view, name='travel_list_by_type'),
 
-    path('', views.travel_list_view, name='travel_list'),
+    # Bookings
     path('create/<int:travel_id>/', views.booking_create, name='booking_create'),
     path('booking/<str:booking_id>/', views.booking_detail_view, name='booking_detail'),
     path('my-bookings/', views.my_bookings_view, name='my_bookings'),
