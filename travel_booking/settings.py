@@ -65,14 +65,13 @@ WSGI_APPLICATION = 'travel_booking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'travel_booking',   # database name
-        'USER': 'root',             # default XAMPP user
-        'PASSWORD': '',             # default XAMPP root user ke liye khali hota hai
-        'HOST': '127.0.0.1',        # 'localhost' bhi chalega
-        'PORT': '3306',             # default MySQL port
+        'NAME': 'travel_booking',     
+        'USER': 'root',           
+        'PASSWORD': '',           
+        'HOST': '127.0.0.1',      
+        'PORT': '3306',           
     }
-    }
-
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
